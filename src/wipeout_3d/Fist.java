@@ -37,7 +37,7 @@ public class Fist {
 		// Set up the sun to move left and right
 		TranslateTransition fistMove = new TranslateTransition(Duration.millis(100),body);
 		fistMove.setByZ(-30);
-		fistMove.setCycleCount(Animation.INDEFINITE);
+		fistMove.setCycleCount(1);
 		fistMove.setAutoReverse(true);
 		fistMove.play();
         
@@ -55,6 +55,16 @@ public class Fist {
 	
 	public Cylinder getObjectRef() {
 		return body;
+	}
+	
+	public void update() {
+		// Run the animation loop
+		
+		// long time = system.currentTimeMillis();
+	}
+	
+	private void refist() {
+		// Launches the fist again
 	}
 	
 }
