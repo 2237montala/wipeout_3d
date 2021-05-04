@@ -21,6 +21,8 @@ import javafx.util.Duration;
 import javafx.animation.Timeline;
 import javafx.animation.Animation;
 
+import java.util.Random;
+
 
 /**
  * Simple 3D World for homework 7
@@ -47,10 +49,11 @@ public class wipeout_3d extends Application {
 	// Create references for the objects in the scene
 	// The player is roddyRich cause he's a box
 	Player roddyRich;
-
-	Fist fistOne;
 	
-
+	Random rand = new Random();
+	
+	Fist fistArray[] = new Fist[10];
+	
 	private void constructWorld(Group root) {
 		AmbientLight light = new AmbientLight(Color.rgb(100, 100, 100));
 		root.getChildren().add(light);
@@ -65,7 +68,7 @@ public class wipeout_3d extends Application {
 		final PhongMaterial greenMaterial = new PhongMaterial();
 		greenMaterial.setDiffuseColor(Color.FORESTGREEN);
 		greenMaterial.setSpecularColor(Color.LIMEGREEN);
-		Box xAxis = new Box(groundLength, groundWidth, groundWidth+1);
+		Box xAxis = new Box(groundLength, groundWidth, groundWidth+1+15);
 		xAxis.setMaterial(greenMaterial);
 		root.getChildren().addAll(xAxis);
 		
@@ -76,7 +79,7 @@ public class wipeout_3d extends Application {
 		wall.setMaterial(wallMaterial);
 
 		wall.setTranslateY(-62);
-		wall.setTranslateZ(25);
+		wall.setTranslateZ(35);//25);
 		
 		root.getChildren().addAll(wall);
 		
@@ -90,13 +93,13 @@ public class wipeout_3d extends Application {
 		
 		root.getChildren().addAll(roddyRich.getObjectRef());
 		
-		fistOne = new Fist(-220,-25,30);
-		
-		fistOne.getObjectRef().setRotate(90);
-		fistOne.getObjectRef().setRotationAxis(new Point3D(1,0,0));
-		
-		root.getChildren().addAll(fistOne.getObjectRef());
-		
+		for(int i = 0; i< fistArray.length; i++) {
+			//fist created at x, y, z, delay
+			fistArray[i] = new Fist(-220+(50*i), -25, 30, rand.nextInt(9)+1);
+			fistArray[i].getObjectRef().setRotate(90);
+			fistArray[i].getObjectRef().setRotationAxis(new Point3D(1,0,0));
+			root.getChildren().add(fistArray[i].getObjectRef());
+		}
 
 	}
 	
@@ -179,5 +182,9 @@ public class wipeout_3d extends Application {
 	}
 	
 	public void update() {
+		//fistOne.update();
+		for(int i = 0; i < fistArray.length; i++) {
+			fistArray[i].update();
+		}
 	}
 }

@@ -2,27 +2,37 @@ package wipeout_3d;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.Group;
-import javafx.scene.PointLight;
-import javafx.scene.shape.Box;
+//import javafx.scene.Group;
+//import javafx.scene.PointLight;
+//import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
-import javafx.geometry.Point3D;
-import javafx.animation.RotateTransition;
+//import javafx.geometry.Point3D;
+//import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
-import javafx.animation.Animation;
-import javafx.animation.Interpolator;
+//import javafx.animation.Animation;
+//import javafx.animation.Interpolator;
 import javafx.util.Duration;
 
 public class Fist {
 	
 	double x,y,z;
+	int delay;
 	
 	Cylinder body;
 	
-	public Fist(double x, double y, double z) {
+	boolean inAnimation = false;
+	
+	TranslateTransition punch;
+	
+	long startTime, endTime;
+	
+	final int ANIMATIONTIME = 1000;
+	
+	public Fist(double x, double y, double z, int delay) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.delay = delay;
 		
 		final PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.RED);
@@ -35,11 +45,11 @@ public class Fist {
 		body.setTranslateZ(z);
 		
 		// Set up the sun to move left and right
-		TranslateTransition fistMove = new TranslateTransition(Duration.millis(100),body);
-		fistMove.setByZ(-30);
-		fistMove.setCycleCount(1);
-		fistMove.setAutoReverse(true);
-		fistMove.play();
+		this.punch = new TranslateTransition(Duration.millis(ANIMATIONTIME),body);
+		punch.setByZ(-30);
+		punch.setCycleCount(2);
+		punch.setAutoReverse(true);
+		//punch.play();
         
 	}
 	
@@ -59,12 +69,19 @@ public class Fist {
 	
 	public void update() {
 		// Run the animation loop
-		
-		// long time = system.currentTimeMillis();
-	}
-	
-	private void refist() {
-		// Launches the fist again
+		if(inAnimation == false) {
+			if(System.currentTimeMillis()%(delay) == 0) {
+				punch.play();
+				startTime = System.currentTimeMillis();
+				inAnimation = true;
+			}
+		}
+		else {
+			endTime = System.currentTimeMillis();
+			if(endTime - startTime > 2*(2*ANIMATIONTIME)+100*delay) {
+				inAnimation = false;
+			}
+		}
 	}
 	
 }
