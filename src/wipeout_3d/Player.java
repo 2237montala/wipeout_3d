@@ -1,21 +1,22 @@
 package wipeout_3d;
 
-import javafx.scene.paint.Color;
+//import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.Group;
-import javafx.scene.PointLight;
+//import javafx.scene.Group;
+//import javafx.scene.PointLight;
 import javafx.scene.shape.Box;
-import javafx.geometry.Point3D;
-import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
-import javafx.animation.Animation;
-import javafx.animation.Interpolator;
-import javafx.util.Duration;
+//import javafx.geometry.Point3D;
+//import javafx.animation.RotateTransition;
+//import javafx.animation.TranslateTransition;
+//import javafx.animation.Animation;
+//import javafx.animation.Interpolator;
+//import javafx.util.Duration;
 
 
 public class Player {
 	
 	double x,y,z;
+	double w,l,h;
 	
 	Box body;
 	
@@ -23,6 +24,10 @@ public class Player {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		
+		this.w = w;
+		this.l = l;
+		this.h = h;
 
 		body = new Box(w,l,h);
 		body.setMaterial(color);
@@ -43,6 +48,31 @@ public class Player {
 	
 	public Box getObjectRef() {
 		return body;
+	}
+	
+	public double getX() {
+		return x;
+	}
+	
+	public double getWidth() {
+		return w;
+	}
+	
+	public void movePlayer(boolean shouldItMove) {
+		if(shouldItMove) {
+			//System.out.println("Moved 1");
+		}
+	}
+	
+	public void valueUpdate() {
+		System.out.println(x+", "+y+", "+z);
+		
+	}
+	
+	public void update() {
+		if(z > 31) {
+			//movePlayer(0,1,0);
+		}
 	}
 	
 }

@@ -17,6 +17,8 @@ public class Fist {
 	
 	double x,y,z;
 	int delay;
+	final int RADIUS = 10;
+	final int LENGTH = 50;
 	
 	Cylinder body;
 	
@@ -38,7 +40,7 @@ public class Fist {
         redMaterial.setDiffuseColor(Color.RED);
         redMaterial.setSpecularColor(Color.PINK);
         
-        body = new Cylinder(10,30);
+        body = new Cylinder(RADIUS,LENGTH);
 		body.setMaterial(redMaterial);
 		body.setTranslateY(y);
 		body.setTranslateX(x);
@@ -81,6 +83,21 @@ public class Fist {
 			if(endTime - startTime > 2*(2*ANIMATIONTIME)+100*delay) {
 				inAnimation = false;
 			}
+		}
+	}
+	
+	public boolean hitting(double playerX, double playerWidth) {
+		//System.out.println(playerX + ", " + playerWidth);
+		
+		
+		//something is wrong with the calc right here \/
+		//--------------------------------------!!!!!!!!!!!!!!!!!!!--
+		if((playerX+playerWidth < x+RADIUS) && (playerX+playerWidth > x-RADIUS)) {
+			//System.out.println(x+", "+RADIUS);
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 	

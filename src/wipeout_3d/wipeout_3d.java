@@ -25,15 +25,25 @@ import java.util.Random;
 
 
 /**
- * Simple 3D World for homework 7
- * by anthony montalbano
+ * Basic recreation of a 3D Wipeout game
+ * by Jason Moens and Anthony Montalbano
+ */
+
+
+/*
+ * TODO: Hit detection by bumper coming out on side
+ * TODO: Shouldn't be able to move back or forward if a bumper is out
+ * TODO: Win detection
+ * TODO: Death
+ * TODO: Gravity
+ * 
  */
 public class wipeout_3d extends Application {
 	private final int FPS = 30;
 	
 	private PerspectiveCamera camera;
 	private Group cameraDolly;
-	private final double cameraQuantity = 10.0;
+//	private final double cameraQuantity = 10.0;
 	private final double sceneWidth = 600;
 	private final double sceneHeight = 600;
 	
@@ -68,7 +78,7 @@ public class wipeout_3d extends Application {
 		final PhongMaterial greenMaterial = new PhongMaterial();
 		greenMaterial.setDiffuseColor(Color.FORESTGREEN);
 		greenMaterial.setSpecularColor(Color.LIMEGREEN);
-		Box xAxis = new Box(groundLength, groundWidth, groundWidth+1+15);
+		Box xAxis = new Box(groundLength+50, groundWidth, groundWidth+1+15);
 		xAxis.setMaterial(greenMaterial);
 		root.getChildren().addAll(xAxis);
 		
@@ -83,19 +93,19 @@ public class wipeout_3d extends Application {
 		
 		root.getChildren().addAll(wall);
 		
-		final PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.RED);
-        redMaterial.setSpecularColor(Color.PINK);
+		final PhongMaterial playerMaterial = new PhongMaterial();
+        playerMaterial.setDiffuseColor(Color.YELLOW);
+        playerMaterial.setSpecularColor(Color.ORANGE);
         
         // Create a new player at x = -200, y = -25, z = 0
         // with a box size of LxWxH = 25,25,25
-        roddyRich = new Player(-1*(groundLength/2)+50,-25,-1,25,25,25,redMaterial);
+        roddyRich = new Player(-1*(groundLength/2),-25,-1,25,25,25,playerMaterial);
 		
 		root.getChildren().addAll(roddyRich.getObjectRef());
 		
 		for(int i = 0; i< fistArray.length; i++) {
 			//fist created at x, y, z, delay
-			fistArray[i] = new Fist(-220+(50*i), -25, 30, rand.nextInt(9)+1);
+			fistArray[i] = new Fist(-220+(50*i), -25, 40, rand.nextInt(9)+1);
 			fistArray[i].getObjectRef().setRotate(90);
 			fistArray[i].getObjectRef().setRotationAxis(new Point3D(1,0,0));
 			root.getChildren().add(fistArray[i].getObjectRef());
@@ -111,7 +121,7 @@ public class wipeout_3d extends Application {
 
 			if (keycode == KeyCode.A) {
 				// Move the player left on the screen
-				if(roddyRich.x >= -1*(groundLength/2)+roddyRich.body.getWidth() ) {
+				if(roddyRich.x >= -250){//-1*(groundLength/2)+roddyRich.body.getWidth() ) {
 					roddyRich.movePlayer(-1 * playerDx, 0, 0);
 					
 					// Move the camera to follow the player
@@ -125,6 +135,37 @@ public class wipeout_3d extends Application {
 				// Move the camera to follow the player
 				cameraDolly.setTranslateX(cameraDolly.getTranslateX() + playerDx);
 			}
+			
+			//TODO: REMOVE THESE AFTER TESTING IS DONE
+			if (keycode == KeyCode.Q) {
+				// Move the player UP on the screen
+				roddyRich.movePlayer(0, -1*playerDx, 0);
+				
+				// Move the camera to follow the player
+				cameraDolly.setTranslateY(cameraDolly.getTranslateY() + -1*playerDx);
+			}
+			if (keycode == KeyCode.W) {
+				// Move the player UP on the screen
+				roddyRich.movePlayer(0, playerDx, 0);
+				
+				// Move the camera to follow the player
+				cameraDolly.setTranslateY(cameraDolly.getTranslateY() + playerDx);
+			}
+			if (keycode == KeyCode.E) {
+				// Move the player FORWARD on the screen
+				roddyRich.movePlayer(0,0,-1*playerDx);
+				
+				// Move the camera to follow the player
+				cameraDolly.setTranslateZ(cameraDolly.getTranslateZ() + -1*playerDx);
+			}
+			if (keycode == KeyCode.R) {
+				// Move the player BACK on the screen
+				roddyRich.movePlayer(0,0,playerDx);
+				
+				// Move the camera to follow the player
+				cameraDolly.setTranslateZ(cameraDolly.getTranslateZ() + playerDx);
+			}
+			
 		});
 	}
 
@@ -182,9 +223,18 @@ public class wipeout_3d extends Application {
 	}
 	
 	public void update() {
-		//fistOne.update();
+		roddyRich.update();
+		roddyRich.valueUpdate();
+		
+		//updating the fist array
 		for(int i = 0; i < fistArray.length; i++) {
 			fistArray[i].update();
 		}
+		
+		//checking each fist if the player is within the xbounds to push it further
+		for(int i = 0 ; i < fistArray.length; i++) {
+			roddyRich.movePlayer(fistArray[i].hitting(roddyRich.getX(), roddyRich.getWidth()));
+		}
+		
 	}
 }
