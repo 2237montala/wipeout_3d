@@ -50,12 +50,17 @@ public class wipeout_3d extends Application {
 	
 	final double groundLength = 500;
 	final double groundWidth = 25;
-	final double playerDx = 5;
+	final double playerDx = 1;
 		
-	final double cameraStartPosX = -400;
+//	final double cameraStartPosX = -400;
+//	final double cameraStartPosY = -50;
+//	final double cameraStartPosZ = -200;
+//	final double cameraStartAngleY = 45;
+	
+	final double cameraStartPosX = -250;
 	final double cameraStartPosY = -50;
-	final double cameraStartPosZ = -200;
-	final double cameraStartAngleY = 45;
+	final double cameraStartPosZ = -400;
+	final double cameraStartAngleY = 0;
 	
 	// Create references for the objects in the scene
 	// The player is roddyRich cause he's a box
