@@ -51,7 +51,6 @@ public class Fist {
 		punch.setByZ(-30);
 		punch.setCycleCount(2);
 		punch.setAutoReverse(true);
-		//punch.play();
         
 	}
 	
@@ -86,17 +85,20 @@ public class Fist {
 		}
 	}
 	
-	public boolean hitting(double playerX, double playerWidth) {
-		System.out.println(playerX + ", " + playerWidth);
-		
-		
-		//something is wrong with the calc right here \/
-		//--------------------------------------!!!!!!!!!!!!!!!!!!!--
-		if((playerX+playerWidth <= body.getTranslateX()+RADIUS) && (playerX+playerWidth > body.getTranslateX()-RADIUS)) {
-			System.out.println(x+", "+RADIUS);
-			return true;
-		}
-		else {
+	public boolean hitting(double playerX, double playerZ, double playerWidth) {
+		playerWidth /= 2;
+		//System.out.println("Player X: " + (playerZ+playerWidth)+ ", " + (playerZ-playerWidth));
+		//System.out.println("Fist Z: " + body.getTranslateZ());
+
+		// Check if the player is being touched by the front face of the cylinder
+		if(playerZ-playerWidth > body.getTranslateZ()-LENGTH) {
+			if(playerX+playerWidth > body.getTranslateX()-RADIUS && playerX-playerWidth <= body.getTranslateX()+RADIUS) {
+					System.out.println("Contact");
+					return true;
+			} else {
+				return false;
+			}
+		} else {
 			return false;
 		}
 	}

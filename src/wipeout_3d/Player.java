@@ -54,6 +54,10 @@ public class Player {
 		return x;
 	}
 	
+	public double getZ() {
+		return z;
+	}
+	
 	public double getWidth() {
 		return w;
 	}

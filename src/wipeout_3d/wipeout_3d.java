@@ -56,11 +56,21 @@ public class wipeout_3d extends Application {
 //	final double cameraStartPosY = -50;
 //	final double cameraStartPosZ = -200;
 //	final double cameraStartAngleY = 45;
+//	final double cameraStartAngleZ = 0;
 	
+	// This camera angle is look at the side of the game
+//	final double cameraStartPosX = -250;
+//	final double cameraStartPosY = -25;
+//	final double cameraStartPosZ = -400;
+//	final double cameraStartAngleY = 0;
+//	final double cameraStartAngleZ = 0;
+	
+	// This camera angle is a top down of the game
 	final double cameraStartPosX = -250;
-	final double cameraStartPosY = -50;
-	final double cameraStartPosZ = -400;
+	final double cameraStartPosY = -400;
+	final double cameraStartPosZ = 0;
 	final double cameraStartAngleY = 0;
+	final double cameraStartAngleX = -90;
 	
 	// Create references for the objects in the scene
 	// The player is roddyRich cause he's a box
@@ -68,7 +78,7 @@ public class wipeout_3d extends Application {
 	
 	Random rand = new Random();
 	
-	Fist fistArray[] = new Fist[10];
+	Fist fistArray[] = new Fist[1];
 	
 	private void constructWorld(Group root) {
 		AmbientLight light = new AmbientLight(Color.rgb(100, 100, 100));
@@ -97,7 +107,7 @@ public class wipeout_3d extends Application {
 		wall.setTranslateY(-62);
 		wall.setTranslateZ(35);//25);
 		
-		root.getChildren().addAll(wall);
+		//root.getChildren().addAll(wall);
 		
 		final PhongMaterial playerMaterial = new PhongMaterial();
         playerMaterial.setDiffuseColor(Color.YELLOW);
@@ -113,9 +123,18 @@ public class wipeout_3d extends Application {
 			//fist created at x, y, z, delay
 			fistArray[i] = new Fist(-220+(50*i), -25, 40, rand.nextInt(9)+1);
 			fistArray[i].getObjectRef().setRotate(90);
+			
+			// Rotate on the x axis
 			fistArray[i].getObjectRef().setRotationAxis(new Point3D(1,0,0));
 			root.getChildren().add(fistArray[i].getObjectRef());
 		}
+		
+		Fist temp = new Fist(-220+20, -25, 40, rand.nextInt(9)+1);
+		temp.getObjectRef().setRotate(0);
+		
+		// Rotate on the x axis
+		temp.getObjectRef().setRotationAxis(new Point3D(1,0,0));
+		root.getChildren().add(temp.getObjectRef());
 
 	}
 	
@@ -202,6 +221,7 @@ public class wipeout_3d extends Application {
 		camera.getTransforms().addAll(xRotate, yRotate);
 
 		yRotate.setAngle(cameraStartAngleY);
+		xRotate.setAngle(cameraStartAngleX);
 		
 		setHandlers(scene, xRotate, yRotate);
 		
@@ -239,7 +259,7 @@ public class wipeout_3d extends Application {
 		
 		//checking each fist if the player is within the xbounds to push it further
 		for(int i = 0 ; i < fistArray.length; i++) {
-			roddyRich.movePlayer(fistArray[i].hitting(roddyRich.getX(), roddyRich.getWidth()));
+			roddyRich.movePlayer(fistArray[i].hitting(roddyRich.getX(), roddyRich.getZ(), roddyRich.getWidth()));
 		}
 		
 	}
