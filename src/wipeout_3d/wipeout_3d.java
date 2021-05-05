@@ -48,7 +48,8 @@ public class wipeout_3d extends Application {
 	private final double sceneHeight = 600;
 	
 	final double groundLength = 500;
-	final double groundWidth = 25;
+	final double groundHeight = 25;
+	final double groundWidth = 25+1+15;
 	final double playerDx = 5;
 		
 //	final double cameraStartPosX = -400;
@@ -70,6 +71,8 @@ public class wipeout_3d extends Application {
 	final double cameraStartPosZ = 0;
 	final double cameraStartAngleY = 0;
 	final double cameraStartAngleX = -90;
+	
+	Box xAxis;
 	
 	// Create references for the objects in the scene
 	// The player is roddyRich cause he's a box
@@ -95,7 +98,7 @@ public class wipeout_3d extends Application {
 		final PhongMaterial greenMaterial = new PhongMaterial();
 		greenMaterial.setDiffuseColor(Color.FORESTGREEN);
 		greenMaterial.setSpecularColor(Color.LIMEGREEN);
-		Box xAxis = new Box(groundLength+50, groundWidth, groundWidth+1+15);
+		xAxis = new Box(groundLength+50, groundHeight, groundWidth);
 		xAxis.setMaterial(greenMaterial);
 		root.getChildren().addAll(xAxis);
 		
@@ -129,13 +132,6 @@ public class wipeout_3d extends Application {
 			fistArray[i].getObjectRef().setRotationAxis(new Point3D(1,0,0));
 			root.getChildren().add(fistArray[i].getObjectRef());
 		}
-		
-		Fist temp = new Fist(-220+20, -25, 40, rand.nextInt(9)+1);
-		temp.getObjectRef().setRotate(0);
-		
-		// Rotate on the x axis
-		temp.getObjectRef().setRotationAxis(new Point3D(1,0,0));
-		root.getChildren().add(temp.getObjectRef());
 
 	}
 	
@@ -290,10 +286,15 @@ public class wipeout_3d extends Application {
 			}
 		}
 		
+		// Push the player if we are contacting the fist
 		if(playerTouchFist) {
 			roddyRich.movePlayer(0, 0, -10);
 		}
 		
+		// If the player has been pushed outside the bounds then end the game
+		if(roddyRich.z + roddyRich.getWidth()/2 <= xAxis.getTranslateZ()-groundWidth/2) {
+			System.out.println("Game over");
+		}
 		
 		
 		roddyRich.valueUpdate();

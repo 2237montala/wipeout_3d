@@ -48,7 +48,7 @@ public class Fist {
 		
 		// Set up the sun to move left and right
 		this.punch = new TranslateTransition(Duration.millis(ANIMATIONTIME),body);
-		punch.setByZ(-35);
+		punch.setByZ(-40);
 		punch.setCycleCount(2);
 		punch.setAutoReverse(true);
         
