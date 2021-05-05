@@ -36,6 +36,7 @@ import java.util.Random;
  * TODO: Win detection
  * TODO: Death
  * TODO: Gravity
+ * TODO: Fist 3D Object
  * 
  */
 public class wipeout_3d extends Application {
@@ -223,7 +224,7 @@ public class wipeout_3d extends Application {
 	}
 	
 	public void update() {
-		roddyRich.update();
+		//roddyRich.update();
 		roddyRich.valueUpdate();
 		
 		//updating the fist array

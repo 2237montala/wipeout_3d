@@ -87,13 +87,13 @@ public class Fist {
 	}
 	
 	public boolean hitting(double playerX, double playerWidth) {
-		//System.out.println(playerX + ", " + playerWidth);
+		System.out.println(playerX + ", " + playerWidth);
 		
 		
 		//something is wrong with the calc right here \/
 		//--------------------------------------!!!!!!!!!!!!!!!!!!!--
 		if((playerX+playerWidth < x+RADIUS) && (playerX+playerWidth > x-RADIUS)) {
-			//System.out.println(x+", "+RADIUS);
+			System.out.println(x+", "+RADIUS);
 			return true;
 		}
 		else {

@@ -65,7 +65,7 @@ public class Player {
 	}
 	
 	public void valueUpdate() {
-		System.out.println(x+", "+y+", "+z);
+		//System.out.println(x+", "+y+", "+z);
 		
 	}
 	
