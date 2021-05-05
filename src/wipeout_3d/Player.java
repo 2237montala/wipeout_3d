@@ -62,10 +62,10 @@ public class Player {
 		return w;
 	}
 	
-	public void movePlayer(boolean shouldItMove) {
-		if(shouldItMove) {
-			//System.out.println("Moved 1");
-		}
+	public void playerPush() {
+//		if(shouldItMove) {
+//			//System.out.println("Moved 1");
+//		}
 	}
 	
 	public void valueUpdate() {

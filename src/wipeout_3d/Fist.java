@@ -28,7 +28,7 @@ public class Fist {
 	
 	long startTime, endTime;
 	
-	final int ANIMATIONTIME = 1000;
+	final int ANIMATIONTIME = 100;
 	
 	public Fist(double x, double y, double z, int delay) {
 		this.x = x;
@@ -48,7 +48,7 @@ public class Fist {
 		
 		// Set up the sun to move left and right
 		this.punch = new TranslateTransition(Duration.millis(ANIMATIONTIME),body);
-		punch.setByZ(-30);
+		punch.setByZ(-35);
 		punch.setCycleCount(2);
 		punch.setAutoReverse(true);
         

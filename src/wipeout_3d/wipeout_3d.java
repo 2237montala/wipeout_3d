@@ -31,7 +31,6 @@ import java.util.Random;
 
 
 /*
- * TODO: Hit detection by bumper coming out on side
  * TODO: Shouldn't be able to move back or forward if a bumper is out
  * TODO: Win detection
  * TODO: Death
@@ -50,7 +49,7 @@ public class wipeout_3d extends Application {
 	
 	final double groundLength = 500;
 	final double groundWidth = 25;
-	final double playerDx = 1;
+	final double playerDx = 5;
 		
 //	final double cameraStartPosX = -400;
 //	final double cameraStartPosY = -50;
@@ -74,6 +73,8 @@ public class wipeout_3d extends Application {
 	
 	// Create references for the objects in the scene
 	// The player is roddyRich cause he's a box
+	boolean playerMoveForward = false;
+	boolean playerMoveBackward = false;
 	Player roddyRich;
 	
 	Random rand = new Random();
@@ -143,22 +144,11 @@ public class wipeout_3d extends Application {
 		scene.setOnKeyPressed(event -> {
 			// What key did the user press?
 			KeyCode keycode = event.getCode();
-
 			if (keycode == KeyCode.A) {
-				// Move the player left on the screen
-				if(roddyRich.x >= -250){//-1*(groundLength/2)+roddyRich.body.getWidth() ) {
-					roddyRich.movePlayer(-1 * playerDx, 0, 0);
-					
-					// Move the camera to follow the player
-					cameraDolly.setTranslateX(cameraDolly.getTranslateX() + -1 * playerDx);
-				}
+				playerMoveBackward = true;
 			}
 			if (keycode == KeyCode.D) {
-				// Move the player right on the screen
-				roddyRich.movePlayer(playerDx, 0, 0);
-				
-				// Move the camera to follow the player
-				cameraDolly.setTranslateX(cameraDolly.getTranslateX() + playerDx);
+				playerMoveForward = true;
 			}
 			
 			//TODO: REMOVE THESE AFTER TESTING IS DONE
@@ -191,6 +181,19 @@ public class wipeout_3d extends Application {
 				cameraDolly.setTranslateZ(cameraDolly.getTranslateZ() + playerDx);
 			}
 			
+		});
+		
+		scene.setOnKeyReleased(event -> {
+			// What key did the user press?
+			KeyCode keycode = event.getCode();
+			
+			if (keycode == KeyCode.A) {
+				playerMoveBackward = false;
+			}
+			
+			if (keycode == KeyCode.D) {
+				playerMoveForward = false;
+			}
 		});
 	}
 
@@ -249,18 +252,53 @@ public class wipeout_3d extends Application {
 	}
 	
 	public void update() {
-		//roddyRich.update();
-		roddyRich.valueUpdate();
-		
+		// Update the environment
 		//updating the fist array
 		for(int i = 0; i < fistArray.length; i++) {
 			fistArray[i].update();
 		}
 		
 		//checking each fist if the player is within the xbounds to push it further
+		boolean playerTouchFist = false;
 		for(int i = 0 ; i < fistArray.length; i++) {
-			roddyRich.movePlayer(fistArray[i].hitting(roddyRich.getX(), roddyRich.getZ(), roddyRich.getWidth()));
+			if(fistArray[i].hitting(roddyRich.getX(), roddyRich.getZ(), roddyRich.getWidth())) {
+				// Move the player in the direction of the fist
+				playerTouchFist = true;
+			}
 		}
+		
+		
+		// Player asked to move forward so try to do that action
+		if(playerMoveForward) {
+			if(!playerTouchFist) {
+				// Cant move forward because touching the a fist
+				// Move the player right on the screen
+				roddyRich.movePlayer(playerDx, 0, 0);
+				
+				// Move the camera to follow the player
+				cameraDolly.setTranslateX(cameraDolly.getTranslateX() + playerDx);
+			}
+		}
+		
+		if(playerMoveBackward) {
+			// Move the player left on the screen
+			if(roddyRich.x >= -250){
+				roddyRich.movePlayer(-1 * playerDx, 0, 0);
+				
+				// Move the camera to follow the player
+				cameraDolly.setTranslateX(cameraDolly.getTranslateX() + -1 * playerDx);
+			}
+		}
+		
+		if(playerTouchFist) {
+			roddyRich.movePlayer(0, 0, -10);
+		}
+		
+		
+		
+		roddyRich.valueUpdate();
+		
+		
 		
 	}
 }
