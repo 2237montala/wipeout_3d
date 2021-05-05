@@ -92,7 +92,7 @@ public class Fist {
 		
 		//something is wrong with the calc right here \/
 		//--------------------------------------!!!!!!!!!!!!!!!!!!!--
-		if((playerX+playerWidth < x+RADIUS) && (playerX+playerWidth > x-RADIUS)) {
+		if((playerX+playerWidth < body.getTranslateX()+RADIUS) && (playerX+playerWidth > body.getTranslateX()-RADIUS)) {
 			System.out.println(x+", "+RADIUS);
 			return true;
 		}
