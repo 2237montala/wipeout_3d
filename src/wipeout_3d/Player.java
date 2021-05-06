@@ -46,6 +46,20 @@ public class Player {
 		body.setTranslateZ(this.z);
 	}
 	
+	public void resetPlayer() {
+		double x = -1*(500/2);
+		double y = -25;
+		double z = -1;
+		
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		
+		body.setTranslateX(x);
+		body.setTranslateY(y);
+		body.setTranslateZ(z);
+	}
+	
 	public Box getObjectRef() {
 		return body;
 	}
@@ -60,17 +74,6 @@ public class Player {
 	
 	public double getWidth() {
 		return w;
-	}
-	
-	public void playerPush() {
-//		if(shouldItMove) {
-//			//System.out.println("Moved 1");
-//		}
-	}
-	
-	public void valueUpdate() {
-		//System.out.println(x+", "+y+", "+z);
-		
 	}
 	
 	public void update() {

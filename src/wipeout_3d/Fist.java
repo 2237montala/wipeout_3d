@@ -28,7 +28,7 @@ public class Fist {
 	
 	long startTime, endTime;
 	
-	final int ANIMATIONTIME = 100;
+	final int ANIMATIONTIME = 250;
 	
 	public Fist(double x, double y, double z, int delay) {
 		this.x = x;

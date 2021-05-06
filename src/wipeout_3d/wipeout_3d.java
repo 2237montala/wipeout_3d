@@ -33,11 +33,7 @@ import java.util.Random;
 /*
  * TODO: Shouldn't be able to move back or forward if a bumper is out
  * TODO: Win detection
- * TODO: Death detection
  * TODO: Import player model
- * TODO: slightly slow down punches
- * TODO: space out the punchers more
- * 
  */
 public class wipeout_3d extends Application {
 	private final int FPS = 30;
@@ -52,10 +48,17 @@ public class wipeout_3d extends Application {
 	final double groundWidth = 25+1+15;
 	final double playerDx = 5;
 		
-	final double cameraStartPosX = -400;
+//	final double cameraStartPosX = -400;
+//	final double cameraStartPosY = -50;
+//	final double cameraStartPosZ = -200;
+//	final double cameraStartAngleY = 45;
+//	final double cameraStartAngleX = 0;
+	
+	//this camera angle is a little less extreme
+	final double cameraStartPosX = -350;
 	final double cameraStartPosY = -50;
 	final double cameraStartPosZ = -200;
-	final double cameraStartAngleY = 45;
+	final double cameraStartAngleY = 35;
 	final double cameraStartAngleX = 0;
 	
 	// This camera angle is look at the side of the game
@@ -100,14 +103,15 @@ public class wipeout_3d extends Application {
 		final PhongMaterial greenMaterial = new PhongMaterial();
 		greenMaterial.setDiffuseColor(Color.FORESTGREEN);
 		greenMaterial.setSpecularColor(Color.LIMEGREEN);
-		xAxis = new Box(groundLength+50, groundHeight, groundWidth);
+		xAxis = new Box(groundLength+50+50, groundHeight, groundWidth);
 		xAxis.setMaterial(greenMaterial);
+		xAxis.setTranslateX(25);
 		root.getChildren().addAll(xAxis);
 		
 		final PhongMaterial wallMaterial = new PhongMaterial();
 		wallMaterial.setDiffuseColor(Color.BLUE);
 		wallMaterial.setSpecularColor(Color.LIMEGREEN);
-		Box wall = new Box(groundLength,150,25);
+		Box wall = new Box(groundLength+100,150,25);
 		wall.setMaterial(wallMaterial);
 
 		wall.setTranslateY(-62);
@@ -127,7 +131,7 @@ public class wipeout_3d extends Application {
 		
 		for(int i = 0; i< fistArray.length; i++) {
 			//fist created at x, y, z, delay
-			fistArray[i] = new Fist(-220+(50*i), -25, 40, rand.nextInt(9)+1);
+			fistArray[i] = new Fist(-220+((50+(rand.nextInt(9)+1))*i), -25, 40, rand.nextInt(9)+1);
 			fistArray[i].getObjectRef().setRotate(90);
 			
 			// Rotate on the x axis
@@ -148,37 +152,7 @@ public class wipeout_3d extends Application {
 			if (keycode == KeyCode.D) {
 				playerMoveForward = true;
 			}
-			
-			//TODO: REMOVE THESE AFTER TESTING IS DONE
-			if (keycode == KeyCode.Q) {
-				// Move the player UP on the screen
-				roddyRich.movePlayer(0, -1*playerDx, 0);
-				
-				// Move the camera to follow the player
-				cameraDolly.setTranslateY(cameraDolly.getTranslateY() + -1*playerDx);
-			}
-			if (keycode == KeyCode.W) {
-				// Move the player UP on the screen
-				roddyRich.movePlayer(0, playerDx, 0);
-				
-				// Move the camera to follow the player
-				cameraDolly.setTranslateY(cameraDolly.getTranslateY() + playerDx);
-			}
-			if (keycode == KeyCode.E) {
-				// Move the player FORWARD on the screen
-				roddyRich.movePlayer(0,0,-1*playerDx);
-				
-				// Move the camera to follow the player
-				cameraDolly.setTranslateZ(cameraDolly.getTranslateZ() + -1*playerDx);
-			}
-			if (keycode == KeyCode.R) {
-				// Move the player BACK on the screen
-				roddyRich.movePlayer(0,0,playerDx);
-				
-				// Move the camera to follow the player
-				cameraDolly.setTranslateZ(cameraDolly.getTranslateZ() + playerDx);
-			}
-			
+						
 		});
 		
 		scene.setOnKeyReleased(event -> {
@@ -253,9 +227,14 @@ public class wipeout_3d extends Application {
 		// Update the environment
 		if(gameWon) {
 			//win the game
+			//TODO: Win the game screen?
 		}
 		else if(gameOver) {
-			//lose the game
+			//lose the game or reset the player to the starting position?
+			roddyRich.resetPlayer();
+			cameraDolly.setTranslateX(cameraStartPosX);
+			gameOver = false;
+			gameWon = false;
 		}
 		else if(!gameOver && !gameWon) {
 			//updating the fist array
@@ -283,6 +262,9 @@ public class wipeout_3d extends Application {
 					// Move the camera to follow the player
 					cameraDolly.setTranslateX(cameraDolly.getTranslateX() + playerDx);
 				}
+				else if(roddyRich.getX() >= 380) {
+					gameWon = true;
+				}
 			}
 			
 			if(playerMoveBackward) {
@@ -303,10 +285,11 @@ public class wipeout_3d extends Application {
 			// If the player has been pushed outside the bounds then end the game
 			if(roddyRich.z + roddyRich.getWidth()/2 <= xAxis.getTranslateZ()-groundWidth/2) {
 				System.out.println("Game over");
+				gameOver = true;
 			}
 			
 			
-			roddyRich.valueUpdate();
+			//roddyRich.valueUpdate();
 		}
 		
 		
