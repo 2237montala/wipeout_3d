@@ -33,9 +33,10 @@ import java.util.Random;
 /*
  * TODO: Shouldn't be able to move back or forward if a bumper is out
  * TODO: Win detection
- * TODO: Death
- * TODO: Gravity
- * TODO: Fist 3D Object
+ * TODO: Death detection
+ * TODO: Import player model
+ * TODO: slightly slow down punches
+ * TODO: space out the punchers more
  * 
  */
 public class wipeout_3d extends Application {
@@ -43,7 +44,6 @@ public class wipeout_3d extends Application {
 	
 	private PerspectiveCamera camera;
 	private Group cameraDolly;
-//	private final double cameraQuantity = 10.0;
 	private final double sceneWidth = 600;
 	private final double sceneHeight = 600;
 	
@@ -52,37 +52,39 @@ public class wipeout_3d extends Application {
 	final double groundWidth = 25+1+15;
 	final double playerDx = 5;
 		
-//	final double cameraStartPosX = -400;
-//	final double cameraStartPosY = -50;
-//	final double cameraStartPosZ = -200;
-//	final double cameraStartAngleY = 45;
-//	final double cameraStartAngleZ = 0;
+	final double cameraStartPosX = -400;
+	final double cameraStartPosY = -50;
+	final double cameraStartPosZ = -200;
+	final double cameraStartAngleY = 45;
+	final double cameraStartAngleX = 0;
 	
 	// This camera angle is look at the side of the game
 //	final double cameraStartPosX = -250;
 //	final double cameraStartPosY = -25;
 //	final double cameraStartPosZ = -400;
 //	final double cameraStartAngleY = 0;
-//	final double cameraStartAngleZ = 0;
+//	final double cameraStartAngleX = 0;
 	
 	// This camera angle is a top down of the game
-	final double cameraStartPosX = -250;
-	final double cameraStartPosY = -400;
-	final double cameraStartPosZ = 0;
-	final double cameraStartAngleY = 0;
-	final double cameraStartAngleX = -90;
+//	final double cameraStartPosX = -250;
+//	final double cameraStartPosY = -400;
+//	final double cameraStartPosZ = 0;
+//	final double cameraStartAngleY = 0;
+//	final double cameraStartAngleX = -90;
 	
 	Box xAxis;
 	
 	// Create references for the objects in the scene
 	// The player is roddyRich cause he's a box
-	boolean playerMoveForward = false;
-	boolean playerMoveBackward = false;
+	boolean playerMoveForward = false, playerMoveBackward = false;
+	
+	boolean gameOver = false, gameWon = false;
+	
 	Player roddyRich;
 	
 	Random rand = new Random();
 	
-	Fist fistArray[] = new Fist[1];
+	Fist fistArray[] = new Fist[10];
 	
 	private void constructWorld(Group root) {
 		AmbientLight light = new AmbientLight(Color.rgb(100, 100, 100));
@@ -111,7 +113,7 @@ public class wipeout_3d extends Application {
 		wall.setTranslateY(-62);
 		wall.setTranslateZ(35);//25);
 		
-		//root.getChildren().addAll(wall);
+		root.getChildren().addAll(wall);
 		
 		final PhongMaterial playerMaterial = new PhongMaterial();
         playerMaterial.setDiffuseColor(Color.YELLOW);
@@ -249,56 +251,63 @@ public class wipeout_3d extends Application {
 	
 	public void update() {
 		// Update the environment
-		//updating the fist array
-		for(int i = 0; i < fistArray.length; i++) {
-			fistArray[i].update();
+		if(gameWon) {
+			//win the game
 		}
-		
-		//checking each fist if the player is within the xbounds to push it further
-		boolean playerTouchFist = false;
-		for(int i = 0 ; i < fistArray.length; i++) {
-			if(fistArray[i].hitting(roddyRich.getX(), roddyRich.getZ(), roddyRich.getWidth())) {
-				// Move the player in the direction of the fist
-				playerTouchFist = true;
+		else if(gameOver) {
+			//lose the game
+		}
+		else if(!gameOver && !gameWon) {
+			//updating the fist array
+			for(int i = 0; i < fistArray.length; i++) {
+				fistArray[i].update();
 			}
-		}
-		
-		
-		// Player asked to move forward so try to do that action
-		if(playerMoveForward) {
-			if(!playerTouchFist) {
-				// Cant move forward because touching the a fist
-				// Move the player right on the screen
-				roddyRich.movePlayer(playerDx, 0, 0);
-				
-				// Move the camera to follow the player
-				cameraDolly.setTranslateX(cameraDolly.getTranslateX() + playerDx);
+			
+			//checking each fist if the player is within the xbounds to push it further
+			boolean playerTouchFist = false;
+			for(int i = 0 ; i < fistArray.length; i++) {
+				if(fistArray[i].hitting(roddyRich.getX(), roddyRich.getZ(), roddyRich.getWidth())) {
+					// Move the player in the direction of the fist
+					playerTouchFist = true;
+				}
 			}
-		}
-		
-		if(playerMoveBackward) {
-			// Move the player left on the screen
-			if(roddyRich.x >= -250){
-				roddyRich.movePlayer(-1 * playerDx, 0, 0);
-				
-				// Move the camera to follow the player
-				cameraDolly.setTranslateX(cameraDolly.getTranslateX() + -1 * playerDx);
+			
+			
+			// Player asked to move forward so try to do that action
+			if(playerMoveForward) {
+				if(!playerTouchFist) {
+					// Cant move forward because touching the a fist
+					// Move the player right on the screen
+					roddyRich.movePlayer(playerDx, 0, 0);
+					
+					// Move the camera to follow the player
+					cameraDolly.setTranslateX(cameraDolly.getTranslateX() + playerDx);
+				}
 			}
+			
+			if(playerMoveBackward) {
+				// Move the player left on the screen
+				if(roddyRich.x >= -250){
+					roddyRich.movePlayer(-1 * playerDx, 0, 0);
+					
+					// Move the camera to follow the player
+					cameraDolly.setTranslateX(cameraDolly.getTranslateX() + -1 * playerDx);
+				}
+			}
+			
+			// Push the player if we are contacting the fist
+			if(playerTouchFist) {
+				roddyRich.movePlayer(0, 0, -10);
+			}
+			
+			// If the player has been pushed outside the bounds then end the game
+			if(roddyRich.z + roddyRich.getWidth()/2 <= xAxis.getTranslateZ()-groundWidth/2) {
+				System.out.println("Game over");
+			}
+			
+			
+			roddyRich.valueUpdate();
 		}
-		
-		// Push the player if we are contacting the fist
-		if(playerTouchFist) {
-			roddyRich.movePlayer(0, 0, -10);
-		}
-		
-		// If the player has been pushed outside the bounds then end the game
-		if(roddyRich.z + roddyRich.getWidth()/2 <= xAxis.getTranslateZ()-groundWidth/2) {
-			System.out.println("Game over");
-		}
-		
-		
-		roddyRich.valueUpdate();
-		
 		
 		
 	}
