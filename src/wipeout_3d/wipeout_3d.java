@@ -11,8 +11,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
-import javafx.scene.shape.Sphere;
-import javafx.scene.shape.DrawMode;
+//import javafx.scene.shape.Sphere;
+//import javafx.scene.shape.DrawMode;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 
@@ -21,6 +21,7 @@ import javafx.util.Duration;
 import javafx.animation.Timeline;
 import javafx.animation.Animation;
 
+import java.io.IOException;
 import java.util.Random;
 
 
@@ -118,6 +119,24 @@ public class wipeout_3d extends Application {
 		wall.setTranslateZ(35);//25);
 		
 		root.getChildren().addAll(wall);
+		
+		ObjView drvr = new ObjView();
+		try {
+			drvr.load(ClassLoader.getSystemResource("roddyrich.obj").toString());
+		} catch(IOException e) {
+			System.out.println("Trouble loading model");
+			e.printStackTrace();
+		}
+		
+		Group model = drvr.getRoot();
+		model.setScaleX(70);
+		model.setScaleY(-70);
+		model.setScaleZ(-70);
+		model.setTranslateX(110);
+		model.setTranslateY(-150);
+		model.setTranslateZ(0);
+		
+		root.getChildren().add(model);
 		
 		final PhongMaterial playerMaterial = new PhongMaterial();
         playerMaterial.setDiffuseColor(Color.YELLOW);
@@ -287,9 +306,6 @@ public class wipeout_3d extends Application {
 				System.out.println("Game over");
 				gameOver = true;
 			}
-			
-			
-			//roddyRich.valueUpdate();
 		}
 		
 		
