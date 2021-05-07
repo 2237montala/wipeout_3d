@@ -21,7 +21,6 @@ import javafx.util.Duration;
 import javafx.animation.Timeline;
 import javafx.animation.Animation;
 
-import java.io.IOException;
 import java.util.Random;
 
 
@@ -119,32 +118,13 @@ public class wipeout_3d extends Application {
 		wall.setTranslateZ(35);//25);
 		
 		root.getChildren().addAll(wall);
-		
-//		ObjView drvr = new ObjView();
-//		try {
-//			drvr.load(ClassLoader.getSystemResource("roddyrich.obj").toString());
-//		} catch(IOException e) {
-//			System.out.println("Trouble loading model");
-//			e.printStackTrace();
-//		}
-//		
-//		Group model = drvr.getRoot();
-//		model.setScaleX(70);
-//		model.setScaleY(-70);
-//		model.setScaleZ(-70);
-//		model.setTranslateX(110);
-//		model.setTranslateY(-150);
-//		model.setTranslateZ(0);
-//		
-//		root.getChildren().add(model);
-		
 		final PhongMaterial playerMaterial = new PhongMaterial();
         playerMaterial.setDiffuseColor(Color.YELLOW);
         playerMaterial.setSpecularColor(Color.ORANGE);
         
         // Create a new player at x = -200, y = -25, z = 0
         // with a box size of LxWxH = 25,25,25
-        roddyRich = new Player(-1*(groundLength/2),-25,-1,25,25,25,playerMaterial);
+        roddyRich = new Player(-1*(groundLength/2),-25,-1,25,25,25,"roddyrich.obj");
 		
 		root.getChildren().addAll(roddyRich.getObjectRef());
 		

@@ -1,5 +1,8 @@
 package wipeout_3d;
 
+import java.io.IOException;
+
+import javafx.scene.Group;
 //import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 //import javafx.scene.Group;
@@ -19,8 +22,9 @@ public class Player {
 	double w,l,h;
 	
 	Box body;
+	Group model;
 	
-	public Player(double x, double y, double z, double w, double l, double h, PhongMaterial color) {
+	public Player(double x, double y, double z, double w, double l, double h, String modelPath) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -30,10 +34,25 @@ public class Player {
 		this.h = h;
 
 		body = new Box(w,l,h);
-		body.setMaterial(color);
 		body.setTranslateY(y);
 		body.setTranslateX(x);
 		body.setTranslateZ(z);
+		
+		ObjView drvr = new ObjView();
+		try {
+			drvr.load(ClassLoader.getSystemResource(modelPath).toString());
+		} catch(IOException e) {
+			System.out.println("Trouble loading model");
+			e.printStackTrace();
+		}
+		
+		model = drvr.getRoot();
+		model.setScaleX(12);
+		model.setScaleY(-12);
+		model.setScaleZ(-12);
+		model.setTranslateX(x);
+		model.setTranslateY(y);
+		model.setTranslateZ(z);
 	}
 	
 	public void movePlayer(double dx, double dy, double dz) {
@@ -44,6 +63,10 @@ public class Player {
 		body.setTranslateX(this.x);
 		body.setTranslateY(this.y);
 		body.setTranslateZ(this.z);
+		
+		model.setTranslateX(this.x);
+		model.setTranslateY(this.y);
+		model.setTranslateZ(this.z);
 	}
 	
 	public void resetPlayer() {
@@ -58,10 +81,14 @@ public class Player {
 		body.setTranslateX(x);
 		body.setTranslateY(y);
 		body.setTranslateZ(z);
+		
+		model.setTranslateX(this.x);
+		model.setTranslateY(this.y);
+		model.setTranslateZ(this.z);
 	}
 	
-	public Box getObjectRef() {
-		return body;
+	public Group getObjectRef() {
+		return model;
 	}
 	
 	public double getX() {
