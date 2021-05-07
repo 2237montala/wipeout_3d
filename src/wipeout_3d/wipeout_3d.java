@@ -120,23 +120,23 @@ public class wipeout_3d extends Application {
 		
 		root.getChildren().addAll(wall);
 		
-		ObjView drvr = new ObjView();
-		try {
-			drvr.load(ClassLoader.getSystemResource("roddyrich.obj").toString());
-		} catch(IOException e) {
-			System.out.println("Trouble loading model");
-			e.printStackTrace();
-		}
-		
-		Group model = drvr.getRoot();
-		model.setScaleX(70);
-		model.setScaleY(-70);
-		model.setScaleZ(-70);
-		model.setTranslateX(110);
-		model.setTranslateY(-150);
-		model.setTranslateZ(0);
-		
-		root.getChildren().add(model);
+//		ObjView drvr = new ObjView();
+//		try {
+//			drvr.load(ClassLoader.getSystemResource("roddyrich.obj").toString());
+//		} catch(IOException e) {
+//			System.out.println("Trouble loading model");
+//			e.printStackTrace();
+//		}
+//		
+//		Group model = drvr.getRoot();
+//		model.setScaleX(70);
+//		model.setScaleY(-70);
+//		model.setScaleZ(-70);
+//		model.setTranslateX(110);
+//		model.setTranslateY(-150);
+//		model.setTranslateZ(0);
+//		
+//		root.getChildren().add(model);
 		
 		final PhongMaterial playerMaterial = new PhongMaterial();
         playerMaterial.setDiffuseColor(Color.YELLOW);
