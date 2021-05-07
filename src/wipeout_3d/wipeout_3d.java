@@ -33,8 +33,7 @@ import java.util.Random;
 
 /*
  * TODO: Shouldn't be able to move back or forward if a bumper is out
- * TODO: Win detection
- * TODO: Import player model
+ * 		 This requires more detailed collision
  */
 public class wipeout_3d extends Application {
 	private final int FPS = 30;
@@ -82,8 +81,8 @@ public class wipeout_3d extends Application {
 	// The player is roddyRich cause he's a box
 	boolean playerMoveForward = false, playerMoveBackward = false;
 	
-	boolean gameOver = false, gameWon = false;
-	
+	boolean gameOver, gameWon,gameReset = false;
+	boolean firstPrintOut = true;
 	Player roddyRich;
 	
 	Random rand = new Random();
@@ -152,6 +151,9 @@ public class wipeout_3d extends Application {
 			}
 			if (keycode == KeyCode.D) {
 				playerMoveForward = true;
+			}
+			if(keycode == KeyCode.ENTER ) {
+				gameReset = true;
 			}
 						
 		});
@@ -229,6 +231,20 @@ public class wipeout_3d extends Application {
 		if(gameWon) {
 			//win the game
 			//TODO: Win the game screen?
+			if(firstPrintOut) {
+				System.out.println("Press ENTER to restart game:");
+				firstPrintOut = false;
+			}
+			
+			if(gameReset) {
+				roddyRich.resetPlayer();
+				cameraDolly.setTranslateX(cameraStartPosX);
+				gameOver = false;
+				gameWon = false;
+				gameReset = false;
+				firstPrintOut = true;
+			}
+						
 		}
 		else if(gameOver) {
 			//lose the game or reset the player to the starting position?
@@ -263,9 +279,6 @@ public class wipeout_3d extends Application {
 					// Move the camera to follow the player
 					cameraDolly.setTranslateX(cameraDolly.getTranslateX() + playerDx);
 				}
-				else if(roddyRich.getX() >= 380) {
-					gameWon = true;
-				}
 			}
 			
 			if(playerMoveBackward) {
@@ -287,6 +300,10 @@ public class wipeout_3d extends Application {
 			if(roddyRich.z + roddyRich.getWidth()/2 <= xAxis.getTranslateZ()-groundWidth/2) {
 				System.out.println("Game over");
 				gameOver = true;
+			} else if(roddyRich.x-roddyRich.l >= xAxis.getTranslateX()+groundLength/2) {
+				// Player hit the end of the game
+				System.out.println("Player WIN");
+				gameWon = true;
 			}
 		}
 		

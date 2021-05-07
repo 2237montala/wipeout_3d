@@ -93,7 +93,6 @@ public class Fist {
 		// Check if the player is being touched by the front face of the cylinder
 		if(playerZ-playerWidth > body.getTranslateZ()-LENGTH) {
 			if(playerX+playerWidth > body.getTranslateX()-RADIUS && playerX-playerWidth <= body.getTranslateX()+RADIUS) {
-					System.out.println("Contact");
 					return true;
 			} else {
 				return false;
