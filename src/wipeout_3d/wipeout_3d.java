@@ -21,7 +21,6 @@ import javafx.util.Duration;
 import javafx.animation.Timeline;
 import javafx.animation.Animation;
 
-import java.io.IOException;
 import java.util.Random;
 
 
@@ -118,7 +117,6 @@ public class wipeout_3d extends Application {
 		wall.setTranslateZ(35);//25);
 		
 		root.getChildren().addAll(wall);
-				
 		final PhongMaterial playerMaterial = new PhongMaterial();
         playerMaterial.setDiffuseColor(Color.YELLOW);
         playerMaterial.setSpecularColor(Color.ORANGE);
